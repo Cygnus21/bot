@@ -1,0 +1,19 @@
+{
+  "one_time": true,
+  "buttons": [
+    [{
+      "action": {
+        "type": "text",
+        "label": "Случайная книга"
+      },
+      "color": "primary"
+    },
+      {
+        "action": {
+          "type": "text",
+          "label": "Последняя прочитанная книга"
+        },
+        "color": "primary"
+      }]
+  ]
+}
