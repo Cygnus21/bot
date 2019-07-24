@@ -55,19 +55,22 @@ for event in longpool.listen():
                     user_id=event.user_id,
                     message='Твой ник - %s' % nickname + '. Выбери что ты хочешь получить: случайную книгу из хотелок или узнать последнюю прочитанную книгу?',
                     random_id='111112',
-                    keyboard=open("keyboard.json", "r", encoding="UTF-8").read()
+                    keyboard=open("bot/keyboard.json", "r", encoding="UTF-8").read()
                 )
 
             if event.text == 'Последняя прочитанная книга':
                 url_read = 'https://www.livelib.ru/reader/%s/read' %(nickname)
                 print(url_read)
                 r = requests.get(url_read)
-                b = bs4.BeautifulSoup(r.text, 'lxml')
-                book = b.select('brow-data brow-book-name')[0].get('title')
+                with open('test.html', 'w') as test:
+                    test.write(r.content.decode('utf-8'))
+                test = open('test.html', 'r')
+                b = bs4.BeautifulSoup(test, 'html.parser')
+                book = b.select('a.brow-book-name.with-cycle')[0].get('title')
                 print(book)
                 vk.messages.send(
                     user_id=event.user_id,
-                    message='Твоей последней прочитанной книгой была следующая книга:%s' % book,
+                    message='Твоей последней прочитанной книгой была следующая книга: %s' % book,
                     random_id='121412'
                 )
 
