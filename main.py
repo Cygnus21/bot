@@ -11,7 +11,7 @@ vk = vk_session.get_api()
 longpool = VkLongPoll(vk_session)
 
 
-def auth(nickname, password):
+def auth(nickname, password): # пока нерабочая функция
     url = 'https://www.livelib.ru/'
     s = requests.Session()
     data = {'user[login]': nickname, 'user[password]': password}
@@ -71,7 +71,7 @@ while 1:
                         random_id='123312'
                     )
 
-                if event.text == 'Случайная книга':
+                if event.text == 'Случайная книга': # пока не работает из-за авторизации
                     username = requests.get('https://api.vk.com/method/users.get?user_ids=event.user_id&fields=bdate&access_token=token&v=5.95')
                     vk.messages.send(
                         user_id=event.user_id,
