@@ -1,7 +1,7 @@
-import vk_api
-import requests, bs4
+import requests
+import bs4
 import re
-import time
+import vk_api
 from vk_api.longpoll import VkLongPoll, VkEventType
 
 token = 'a9e54cf93f3b9a9ef5e8ca7e88bf12e7d645cf23bd574a6cdbf42e9afbd2425574409742c877deee462e2'
@@ -50,7 +50,7 @@ while 1:
                     print(nickname)
                     vk.messages.send(
                         user_id=event.user_id,
-                        message='Твой ник - %s' % nickname + '. Выбери что ты хочешь получить: случайную книгу из хотелок или узнать последнюю прочитанную книгу?',
+                        message='Твой ник - %s' % nickname + '. Выбери что ты хочешь узнать: число твоих прочитанных книг или последнюю прочитанную книгу?',
                         random_id='111112',
                         keyboard=open("bot/keyboard.json", "r", encoding="UTF-8").read()
                     )
@@ -71,7 +71,7 @@ while 1:
                         random_id='123312'
                     )
 
-                if event.text == 'Случайная книга': # пока не работает из-за авторизации
+                if event.text == 'Случайная книга':  # пока не работает из-за авторизации
                     username = requests.get('https://api.vk.com/method/users.get?user_ids=event.user_id&fields=bdate&access_token=token&v=5.95')
                     vk.messages.send(
                         user_id=event.user_id,
@@ -94,6 +94,21 @@ while 1:
                         user_id=event.user_id,
                         message='Тебе выпала следующая книга: %s' % book,
                         random_id='121762'
+                    )
+                if event.text == 'Количество моих прочитанных книг':
+                    url_read = 'https://www.livelib.ru/reader/%s' % (nickname)
+                    print(url_read)
+                    r = requests.get(url_read)
+                    with open('bot/count.html', 'w') as test:
+                        test.write(r.content.decode('utf-8'))
+                    test = open('bot/count.html', 'r')
+                    b = bs4.BeautifulSoup(test, 'html.parser')
+                    book = b.select('a[href$="read"]')[0].contents[1].contents[0]
+                    print(book)
+                    vk.messages.send(
+                        user_id=event.user_id,
+                        message='Общее количество прочитанных книг: %s' % book,
+                        random_id='129521'
                     )
 
 
